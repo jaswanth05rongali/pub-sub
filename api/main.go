@@ -3,49 +3,51 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jaswanth05rongali/pub-sub/kafka"
-	"github.com/namsral/flag"
+	"github.com/jaswanth05rongali/second-app/pub"
 	"github.com/rs/zerolog/log"
+	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
 var logger = log.With().Str("pkg", "main").Logger()
 
+var p *kafka.Producer
+
 var (
-	listenAddrApi  string
+	listenAddrAPI  string
 	kafkaBrokerURL string
-	kafkaVerbose   bool
 	kafkaTopic     string
-	kafkaClientId  string
 )
 
 func main() {
-	flag.StringVar(&listenAddrApi, "listen-address", "0.0.0.0:9000", "Listen address for api")
-	flag.StringVar(&kafkaBrokerURL, "kafka-brokers", "localhost:19092,localhost:29092,localhost:39092", "kafka-brokers URLs, All of them seperated with comma")
-	flag.BoolVar(&kafkaVerbose, "kafka-verbose", true, "kafka-verbose logging")
-	flag.StringVar(&kafkaTopic, "kafka-topic", "foo", "Kafka Topic")
-	flag.StringVar(&kafkaClientId, "kafka-clientId", "my-client-id", "Kafka client Id")
+	flag.StringVar(&listenAddrAPI, "listen-address", "0.0.0.0:9000", "Listen address for api")
+	flag.StringVar(&kafkaBrokerURL, "kafkaBroker", "localhost:19092", "URL of kafka broker")
+	flag.StringVar(&kafkaTopic, "kafkaTopic", "foo", "kafka topic to push")
 
 	flag.Parse()
 
-	kafkaProducer, err := kafka.Configure(strings.Split(kafkaBrokerURL, ","), kafkaClientId, kafkaTopic)
+	var err error
+	p, err = pub.Producer(kafkaBrokerURL)
 	if err != nil {
-		logger.Error().Str("error", err.Error()).Msg("unable to configure kafka")
-		return
+		fmt.Printf("Failed to create producer: %s\n", err)
+		os.Exit(1)
 	}
-	defer kafkaProducer.Close()
+
+	fmt.Printf("Created Producer %v\n", p)
+	defer p.Close()
 
 	var errChan = make(chan error, 1)
+
 	go func() {
-		log.Info().Msgf("starting server at %s", listenAddrApi)
-		errChan <- server(listenAddrApi)
+		log.Info().Msgf("starting server at %s", listenAddrAPI)
+		errChan <- server(listenAddrAPI)
 	}()
 
 	var signalChan = make(chan os.Signal, 1)
@@ -67,7 +69,11 @@ func server(listenAddr string) error {
 	router.POST("/api/v1/data", postDataToKafka)
 
 	for _, routeInfo := range router.Routes() {
-		logger.Debug().Str("path", routeInfo.Path).Str("handler", routeInfo.Handler).Str("method", routeInfo.Method).Msg("registered routes")
+		logger.Debug().
+			Str("path", routeInfo.Path).
+			Str("handler", routeInfo.Handler).
+			Str("method", routeInfo.Method).
+			Msg("registered routes")
 	}
 
 	return router.Run(listenAddr)
@@ -94,7 +100,15 @@ func postDataToKafka(ctx *gin.Context) {
 		return
 	}
 
-	err = kafka.Push(parent, nil, formInBytes)
+	deliveryChan := make(chan kafka.Event)
+
+	value := string(formInBytes)
+	err = p.Produce(&kafka.Message{
+		TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: kafka.PartitionAny},
+		Value:          []byte(value),
+		Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
+	}, deliveryChan)
+
 	if err != nil {
 		ctx.JSON(http.StatusUnprocessableEntity, map[string]interface{}{
 			"error": map[string]interface{}{
@@ -106,9 +120,25 @@ func postDataToKafka(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, map[string]interface{}{
-		"success": true,
-		"message": "success push data into kafka",
-		"data":    form,
-	})
+	e := <-deliveryChan
+	m := e.(*kafka.Message)
+
+	if m.TopicPartition.Error != nil {
+		fmt.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
+		ctx.JSON(http.StatusOK, map[string]interface{}{
+			"success": false,
+			"message": "Message push failed",
+		})
+	} else {
+		fmt.Printf("Delivered message to topic %s [%d] at offset %v\n",
+			*m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
+
+		ctx.JSON(http.StatusOK, map[string]interface{}{
+			"success": true,
+			"message": "success push data into kafka",
+			"data":    form,
+		})
+	}
+
+	close(deliveryChan)
 }
