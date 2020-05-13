@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"github.com/gin-gonic/gin"
@@ -21,15 +22,19 @@ var logger = log.With().Str("pkg", "main").Logger()
 var p *kafka.Producer
 
 var (
-	listenAddrAPI  string
-	kafkaBrokerURL string
-	kafkaTopic     string
+	listenAddrAPI       string
+	kafkaBrokerURL      string
+	kafkaTopic          string
+	kafkaPubMessageType string
+	pubPartition        string
 )
 
 func main() {
 	flag.StringVar(&listenAddrAPI, "listen-address", "0.0.0.0:9000", "Listen address for api")
 	flag.StringVar(&kafkaBrokerURL, "kafkaBroker", "localhost:19092", "URL of kafka broker")
 	flag.StringVar(&kafkaTopic, "kafkaTopic", "foo", "kafka topic to push")
+	flag.StringVar(&kafkaPubMessageType, "pubMessageType", "0", "0 - No key, 1 - With Key, 2 - With Parition number")
+	flag.StringVar(&pubPartition, "partitionToPublish", "0", "Which partition to publish")
 
 	flag.Parse()
 
@@ -103,11 +108,33 @@ func postDataToKafka(ctx *gin.Context) {
 	deliveryChan := make(chan kafka.Event)
 
 	value := string(formInBytes)
-	err = p.Produce(&kafka.Message{
-		TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: kafka.PartitionAny},
-		Value:          []byte(value),
-		Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
-	}, deliveryChan)
+	var message kafka.Message
+	if kafkaPubMessageType == "0" {
+		message = kafka.Message{
+			TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: kafka.PartitionAny},
+			Value:          []byte(value),
+			Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
+		}
+	} else if kafkaPubMessageType == "1" {
+		message = kafka.Message{
+			TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: kafka.PartitionAny},
+			Value:          []byte(value),
+			Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
+		}
+	} else {
+		par, er := strconv.Atoi(pubPartition)
+		part := int32(par)
+		if er != nil {
+			logger.Error().Err(err).Msg("error while converting partitionToPublish to int, exiting...")
+		}
+		message = kafka.Message{
+			TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: part},
+			Value:          []byte(value),
+			Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
+		}
+	}
+
+	err = p.Produce(&message, deliveryChan)
 
 	if err != nil {
 		ctx.JSON(http.StatusUnprocessableEntity, map[string]interface{}{
