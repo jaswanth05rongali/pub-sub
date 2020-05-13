@@ -11,7 +11,7 @@ import (
 	"syscall"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jaswanth05rongali/second-app/pub"
+	"github.com/jaswanth05rongali/pub-sub/pub"
 	"github.com/rs/zerolog/log"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
