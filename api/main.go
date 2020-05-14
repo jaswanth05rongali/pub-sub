@@ -89,7 +89,14 @@ func postDataToKafka(ctx *gin.Context) {
 	defer parent.Done()
 
 	form := &struct {
-		Text string `form:"text" json:"text"`
+		Requestid     string `json:"request_id"`
+		Topicname     string `json:"topic_name"`
+		Messagebody   string `json:"message_body"`
+		Transactionid string `json:"transaction_id"`
+		Email         string `json:"email"`
+		Phone         string `json:"phone"`
+		Customerid    string `json:"customer_id"`
+		Key           string `json:"key"`
 	}{}
 
 	ctx.Bind(form)
