@@ -115,6 +115,7 @@ func postDataToKafka(ctx *gin.Context) {
 	deliveryChan := make(chan kafka.Event)
 
 	value := string(formInBytes)
+	kafkaTopic = form.Topicname
 	var message kafka.Message
 	if kafkaPubMessageType == "0" {
 		message = kafka.Message{
@@ -123,8 +124,10 @@ func postDataToKafka(ctx *gin.Context) {
 			Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
 		}
 	} else if kafkaPubMessageType == "1" {
+		key := form.Key
 		message = kafka.Message{
 			TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: kafka.PartitionAny},
+			Key:            []byte(key),
 			Value:          []byte(value),
 			Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
 		}
