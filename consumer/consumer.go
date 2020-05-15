@@ -56,6 +56,7 @@ func main() {
 			case *kafka.Message:
 				fmt.Printf("%% Message on %s:\n%s\n",
 					e.TopicPartition, string(e.Value))
+				// SendMessage(string(e.Value))
 				if e.Headers != nil {
 					fmt.Printf("%% Headers: %v\n", e.Headers)
 				}
@@ -73,3 +74,10 @@ func main() {
 	fmt.Printf("Closing consumer\n")
 	c.Close()
 }
+
+// func SendMessage(value string) {
+// 	dataStrings := strings.Split(strings.Split(strings.Split(value, "{")[1],"}")[0],",")
+//     messageBody := strings.Split(strings.Split(dataStrings[2],":")[1],"'")[1]
+//     emailId := strings.Split(strings.Split(dataStrings[4],":")[1],"'")[1]
+// 	phoneNumber := strings.Split(strings.Split(dataStrings[5],":")[1],"'")[1]
+// }
