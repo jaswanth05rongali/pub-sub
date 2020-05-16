@@ -1,13 +1,17 @@
 package main
 
 import (
+	"container/list"
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
+
+// var prevTimeRetry
 
 func main() {
 
@@ -40,7 +44,8 @@ func main() {
 	err = c.SubscribeTopics(topics, nil)
 
 	run := true
-
+	queue := list.New()
+	// waitTime := 300000
 	for run == true {
 		select {
 		case sig := <-sigchan:
@@ -48,6 +53,25 @@ func main() {
 			run = false
 		default:
 			ev := c.Poll(100)
+			var continueFromHere string
+			if queue.Len() > 0 {
+				if ev != nil {
+					switch e := ev.(type) {
+					case *kafka.Message:
+						fmt.Printf("%% Message on %s:\n%s\n",
+							e.TopicPartition, string(e.Value))
+						queue.PushBack(string(e.Value))
+						continueFromHere = retrySendingMessage(queue)
+					default:
+						continueFromHere = retrySendingMessage(queue)
+					}
+				} else {
+					continueFromHere = retrySendingMessage(queue)
+				}
+			}
+			if continueFromHere == "YES" {
+				continue
+			}
 			if ev == nil {
 				continue
 			}
@@ -56,7 +80,10 @@ func main() {
 			case *kafka.Message:
 				fmt.Printf("%% Message on %s:\n%s\n",
 					e.TopicPartition, string(e.Value))
-				// SendMessage(string(e.Value))
+				sentStatus := sendMessage(string(e.Value))
+				if sentStatus == false {
+					queue.PushBack(string(e.Value))
+				}
 				if e.Headers != nil {
 					fmt.Printf("%% Headers: %v\n", e.Headers)
 				}
@@ -75,9 +102,37 @@ func main() {
 	c.Close()
 }
 
-// func SendMessage(value string) {
-// 	dataStrings := strings.Split(strings.Split(strings.Split(value, "{")[1],"}")[0],",")
-//     messageBody := strings.Split(strings.Split(dataStrings[2],":")[1],"'")[1]
-//     emailId := strings.Split(strings.Split(dataStrings[4],":")[1],"'")[1]
-// 	phoneNumber := strings.Split(strings.Split(dataStrings[5],":")[1],"'")[1]
-// }
+func sendMessage(value string) bool {
+	dataStrings := strings.Split(strings.Split(strings.Split(value, "{")[1], "}")[0], ",")
+	// messageBody := strings.Split(strings.Split(dataStrings[2],":")[1],"'")[1]
+	emailString := strings.Split(dataStrings[4], ":")[1]
+	emailID := emailString[1 : len(emailString)-1]
+	// phoneNumber := strings.Split(strings.Split(dataStrings[5],":")[1],"'")[1]
+
+	serverStatus := false
+	if serverStatus {
+		fmt.Printf("Message Sent Successfully to %v\n", emailID)
+		return serverStatus
+	} else {
+		fmt.Printf("Message delivery to %v failed.\n", emailID)
+		return serverStatus
+	}
+}
+
+func retrySendingMessage(mQueue *list.List) string {
+	for mQueue.Len() > 0 {
+		element := mQueue.Front()
+		sent := sendMessage(element.Value.(string))
+		if sent {
+			mQueue.Remove(element)
+		} else {
+			break
+		}
+	}
+
+	if mQueue.Len() > 0 {
+		return "YES"
+	}
+
+	return "NO"
+}
