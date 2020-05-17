@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -11,9 +10,12 @@ import (
 	"strconv"
 	"syscall"
 
+	"github.com/jaswanth05rongali/first-app/config"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jaswanth05rongali/pub-sub/pub"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/viper"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
@@ -30,13 +32,21 @@ var (
 )
 
 func main() {
-	flag.StringVar(&listenAddrAPI, "listen-address", "0.0.0.0:9000", "Listen address for api")
-	flag.StringVar(&kafkaBrokerURL, "kafkaBroker", "localhost:19092", "URL of kafka broker")
-	flag.StringVar(&kafkaTopic, "kafkaTopic", "foo", "kafka topic to push")
-	flag.StringVar(&kafkaPubMessageType, "pubMessageType", "0", "0 - No key, 1 - With Key, 2 - With Parition number")
-	flag.StringVar(&pubPartition, "partitionToPublish", "0", "Which partition to publish")
+	// flag.StringVar(&listenAddrAPI, "listen-address", "0.0.0.0:9000", "Listen address for api")
+	// flag.StringVar(&kafkaBrokerURL, "kafkaBroker", "localhost:19092", "URL of kafka broker")
+	// flag.StringVar(&kafkaTopic, "kafkaTopic", "foo", "kafka topic to push")
+	// flag.StringVar(&kafkaPubMessageType, "pubMessageType", "0", "0 - No key, 1 - With Key, 2 - With Parition number")
+	// flag.StringVar(&pubPartition, "partitionToPublish", "0", "Which partition to publish")
 
-	flag.Parse()
+	// flag.Parse()
+
+	config.Init(true)
+
+	listenAddrAPI = viper.GetString("listenAddrAPI")
+	kafkaBrokerURL = viper.GetString("kafkaBrokerURL")
+	kafkaTopic = viper.GetString("kafkaTopic")
+	kafkaPubMessageType = viper.GetString("kafkaPubMessageType")
+	pubPartition = viper.GetString("pubPartition")
 
 	var err error
 	p, err = pub.Producer(kafkaBrokerURL)

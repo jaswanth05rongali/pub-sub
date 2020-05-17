@@ -9,6 +9,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/jaswanth05rongali/first-app/config"
+
+	"github.com/spf13/viper"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
@@ -21,15 +24,21 @@ var (
 
 func main() {
 
-	if len(os.Args) < 4 {
-		fmt.Fprintf(os.Stderr, "Usage: %s <broker> <group> <topics..>\n",
-			os.Args[0])
-		os.Exit(1)
-	}
+	// if len(os.Args) < 4 {
+	// 	fmt.Fprintf(os.Stderr, "Usage: %s <broker> <group> <topics..>\n",
+	// 		os.Args[0])
+	// 	os.Exit(1)
+	// }
 
-	broker := os.Args[1]
-	group := os.Args[2]
-	topics := os.Args[3:]
+	// broker := os.Args[1]
+	// group := os.Args[2]
+	// topics := os.Args[3:]
+
+	config.Init(false)
+
+	broker := viper.GetString("broker")
+	group := viper.GetString("group")
+	topics := viper.GetString("topic")
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
@@ -47,15 +56,15 @@ func main() {
 
 	fmt.Printf("Created Consumer %v\n", c)
 
-	err = c.SubscribeTopics(topics, nil)
+	err = c.Subscribe(topics, nil)
 
 	run := true
 	queue := list.New()
 	serverStatus = true
 	prevServerTime = time.Now().Unix()
-	serverRunTime := int64(120)
-	serverDownTime := int64(30)
-	waitTime := int64(60)
+	serverRunTime := viper.GetInt64("serverRunTime")
+	serverDownTime := viper.GetInt64("serverDownTime")
+	waitTime := viper.GetInt64("waitTime")
 	for run == true {
 		select {
 		case sig := <-sigchan:
@@ -150,7 +159,7 @@ func sendMessage(value string) bool {
 	// phoneNumber := strings.Split(strings.Split(dataStrings[5],":")[1],"'")[1]
 
 	if serverStatus {
-		fmt.Printf("Message: '%v' Sent Successfully to %v. Request ID: %v\n", messageBody, emailID, requestBody)
+		fmt.Printf("Message: '%v' sent successfully to %v. Request ID: %v\n", messageBody, emailID, requestBody)
 		return serverStatus
 	} else {
 		fmt.Printf("Message: '%v' delivery to %v failed. Server Down!! Request ID: %v\n", messageBody, emailID, requestBody)
