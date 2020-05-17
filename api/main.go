@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/jaswanth05rongali/first-app/config"
+	"github.com/jaswanth05rongali/pub-sub/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jaswanth05rongali/pub-sub/pub"
