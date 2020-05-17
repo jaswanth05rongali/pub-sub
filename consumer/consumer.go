@@ -7,11 +7,17 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
-// var prevTimeRetry
+var prevRetryTime int64
+
+var (
+	serverStatus   bool
+	prevServerTime int64
+)
 
 func main() {
 
@@ -45,7 +51,11 @@ func main() {
 
 	run := true
 	queue := list.New()
-	// waitTime := 300000
+	serverStatus = true
+	prevServerTime = time.Now().Unix()
+	serverRunTime := int64(120)
+	serverDownTime := int64(30)
+	waitTime := int64(60)
 	for run == true {
 		select {
 		case sig := <-sigchan:
@@ -54,19 +64,46 @@ func main() {
 		default:
 			ev := c.Poll(100)
 			var continueFromHere string
+			currentTime := time.Now().Unix()
+			if serverStatus == true {
+				if currentTime > (prevServerTime + serverRunTime) {
+					serverStatus = !serverStatus
+					prevServerTime = currentTime
+				}
+			} else {
+				if currentTime > (prevServerTime + serverDownTime) {
+					serverStatus = !serverStatus
+					prevServerTime = currentTime
+				}
+			}
+
 			if queue.Len() > 0 {
-				if ev != nil {
-					switch e := ev.(type) {
-					case *kafka.Message:
-						fmt.Printf("%% Message on %s:\n%s\n",
-							e.TopicPartition, string(e.Value))
-						queue.PushBack(string(e.Value))
-						continueFromHere = retrySendingMessage(queue)
-					default:
+				if currentTime > (prevRetryTime + waitTime) {
+					if ev != nil {
+						switch e := ev.(type) {
+						case *kafka.Message:
+							fmt.Printf("%% Message on %s:\n%s\n",
+								e.TopicPartition, string(e.Value))
+							queue.PushBack(string(e.Value))
+							continueFromHere = retrySendingMessage(queue)
+						default:
+							continueFromHere = retrySendingMessage(queue)
+						}
+					} else {
 						continueFromHere = retrySendingMessage(queue)
 					}
+					prevRetryTime = currentTime
 				} else {
-					continueFromHere = retrySendingMessage(queue)
+					if ev != nil {
+						switch e := ev.(type) {
+						case *kafka.Message:
+							fmt.Printf("%% Message on %s:\n%s\n",
+								e.TopicPartition, string(e.Value))
+							queue.PushBack(string(e.Value))
+						default:
+						}
+					}
+					continueFromHere = "YES"
 				}
 			}
 			if continueFromHere == "YES" {
@@ -109,7 +146,6 @@ func sendMessage(value string) bool {
 	emailID := emailString[1 : len(emailString)-1]
 	// phoneNumber := strings.Split(strings.Split(dataStrings[5],":")[1],"'")[1]
 
-	serverStatus := false
 	if serverStatus {
 		fmt.Printf("Message Sent Successfully to %v\n", emailID)
 		return serverStatus
