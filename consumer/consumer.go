@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/jaswanth05rongali/first-app/config"
+	"github.com/jaswanth05rongali/pub-sub/config"
 
 	"github.com/spf13/viper"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
