@@ -141,16 +141,19 @@ func main() {
 
 func sendMessage(value string) bool {
 	dataStrings := strings.Split(strings.Split(strings.Split(value, "{")[1], "}")[0], ",")
-	// messageBody := strings.Split(strings.Split(dataStrings[2],":")[1],"'")[1]
+	requestString := strings.Split(dataStrings[0], ":")[1]
+	requestBody := requestString[1 : len(requestString)-1]
+	messageString := strings.Split(dataStrings[2], ":")[1]
+	messageBody := messageString[1 : len(messageString)-1]
 	emailString := strings.Split(dataStrings[4], ":")[1]
 	emailID := emailString[1 : len(emailString)-1]
 	// phoneNumber := strings.Split(strings.Split(dataStrings[5],":")[1],"'")[1]
 
 	if serverStatus {
-		fmt.Printf("Message Sent Successfully to %v\n", emailID)
+		fmt.Printf("Message: '%v' Sent Successfully to %v. Request ID: %v\n", messageBody, emailID, requestBody)
 		return serverStatus
 	} else {
-		fmt.Printf("Message delivery to %v failed.\n", emailID)
+		fmt.Printf("Message: '%v' delivery to %v failed. Server Down!! Request ID: %v\n", messageBody, emailID, requestBody)
 		return serverStatus
 	}
 }
