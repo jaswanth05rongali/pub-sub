@@ -11,17 +11,16 @@ import (
 	"syscall"
 
 	"github.com/jaswanth05rongali/pub-sub/config"
+	"github.com/jaswanth05rongali/pub-sub/producer"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jaswanth05rongali/pub-sub/pub"
+
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
 var logger = log.With().Str("pkg", "main").Logger()
-
-var p *kafka.Producer
 
 var (
 	listenAddrAPI       string
@@ -32,13 +31,6 @@ var (
 )
 
 func main() {
-	// flag.StringVar(&listenAddrAPI, "listen-address", "0.0.0.0:9000", "Listen address for api")
-	// flag.StringVar(&kafkaBrokerURL, "kafkaBroker", "localhost:19092", "URL of kafka broker")
-	// flag.StringVar(&kafkaTopic, "kafkaTopic", "foo", "kafka topic to push")
-	// flag.StringVar(&kafkaPubMessageType, "pubMessageType", "0", "0 - No key, 1 - With Key, 2 - With Parition number")
-	// flag.StringVar(&pubPartition, "partitionToPublish", "0", "Which partition to publish")
-
-	// flag.Parse()
 
 	config.Init(true)
 
@@ -48,15 +40,8 @@ func main() {
 	kafkaPubMessageType = viper.GetString("kafkaPubMessageType")
 	pubPartition = viper.GetString("pubPartition")
 
-	var err error
-	p, err = pub.Producer(kafkaBrokerURL)
-	if err != nil {
-		fmt.Printf("Failed to create producer: %s\n", err)
-		os.Exit(1)
-	}
-
-	fmt.Printf("Created Producer %v\n", p)
-	defer p.Close()
+	producer.Init(kafkaBrokerURL)
+	defer producer.P.Close()
 
 	var errChan = make(chan error, 1)
 
@@ -154,7 +139,7 @@ func postDataToKafka(ctx *gin.Context) {
 		}
 	}
 
-	err = p.Produce(&message, deliveryChan)
+	err = producer.P.Produce(&message, deliveryChan)
 
 	if err != nil {
 		ctx.JSON(http.StatusUnprocessableEntity, map[string]interface{}{
