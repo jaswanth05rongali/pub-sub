@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"strconv"
 	"syscall"
 
 	"github.com/jaswanth05rongali/pub-sub/config"
+	"github.com/jaswanth05rongali/pub-sub/factory"
 	"github.com/jaswanth05rongali/pub-sub/producer"
 
 	"github.com/gin-gonic/gin"
@@ -43,14 +43,14 @@ func main() {
 	producer.Init(kafkaBrokerURL)
 	defer producer.P.Close()
 
-	var errChan = make(chan error, 1)
+	errChan := make(chan error, 1)
 
 	go func() {
 		log.Info().Msgf("starting server at %s", listenAddrAPI)
 		errChan <- server(listenAddrAPI)
 	}()
 
-	var signalChan = make(chan os.Signal, 1)
+	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 	select {
 	case <-signalChan:
@@ -111,33 +111,7 @@ func postDataToKafka(ctx *gin.Context) {
 
 	value := string(formInBytes)
 	kafkaTopic = form.Topicname
-	var message kafka.Message
-	if kafkaPubMessageType == "0" {
-		message = kafka.Message{
-			TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: kafka.PartitionAny},
-			Value:          []byte(value),
-			Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
-		}
-	} else if kafkaPubMessageType == "1" {
-		key := form.Key
-		message = kafka.Message{
-			TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: kafka.PartitionAny},
-			Key:            []byte(key),
-			Value:          []byte(value),
-			Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
-		}
-	} else {
-		par, er := strconv.Atoi(pubPartition)
-		part := int32(par)
-		if er != nil {
-			logger.Error().Err(err).Msg("error while converting partitionToPublish to int, exiting...")
-		}
-		message = kafka.Message{
-			TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: part},
-			Value:          []byte(value),
-			Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
-		}
-	}
+	message := factory.GetMessage(kafkaPubMessageType, form.Key, pubPartition, kafkaTopic, value)
 
 	err = producer.P.Produce(&message, deliveryChan)
 
