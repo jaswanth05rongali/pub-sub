@@ -39,7 +39,7 @@ func Consume() {
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
 	run := true
-	for run == true {
+	for run {
 		select {
 		case sig := <-sigchan:
 			fmt.Printf("Caught signal %v: terminating\n", sig)
@@ -52,15 +52,14 @@ func Consume() {
 
 			switch e := ev.(type) {
 			case *kafka.Message:
+				message := string(e.Value)
 				fmt.Printf("%% Message on %s:\n%s\n",
-					e.TopicPartition, string(e.Value))
-				sentStatus := client.SendMessage(string(e.Value))
-				if sentStatus == false {
-					client.RetrySendingMessage(string(e.Value))
-					C.Commit()
-				} else {
-					C.Commit()
+					e.TopicPartition, message)
+				sentStatus := client.SendMessage(message)
+				if !sentStatus {
+					client.RetrySendingMessage(message)
 				}
+				C.Commit()
 				if e.Headers != nil {
 					fmt.Printf("%% Headers: %v\n", e.Headers)
 				}

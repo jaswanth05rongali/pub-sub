@@ -27,17 +27,16 @@ func Init() {
 //SendMessage will check for the client. If it is up and running then the func sends the message to the client and returns a true value. If client is down, it returns a false.
 func SendMessage(value string) bool {
 	currentTime := time.Now().Unix()
-	if serverStatus == true {
+	if serverStatus {
 		if currentTime > (prevServerTime + serverRunTime) {
 			serverStatus = !serverStatus
-			prevServerTime = currentTime
 		}
 	} else {
 		if currentTime > (prevServerTime + serverDownTime) {
 			serverStatus = !serverStatus
-			prevServerTime = currentTime
 		}
 	}
+	prevServerTime = currentTime
 
 	dataStrings := strings.Split(strings.Split(strings.Split(value, "{")[1], "}")[0], ",")
 	requestString := strings.Split(dataStrings[0], ":")[1]
