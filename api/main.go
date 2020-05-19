@@ -43,14 +43,14 @@ func main() {
 	producer.Init(kafkaBrokerURL)
 	defer producer.P.Close()
 
-	var errChan = make(chan error, 1)
+	errChan := make(chan error, 1)
 
 	go func() {
 		log.Info().Msgf("starting server at %s", listenAddrAPI)
 		errChan <- server(listenAddrAPI)
 	}()
 
-	var signalChan = make(chan os.Signal, 1)
+	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 	select {
 	case <-signalChan:
