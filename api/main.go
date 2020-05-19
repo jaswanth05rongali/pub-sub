@@ -23,11 +23,9 @@ import (
 var logger = log.With().Str("pkg", "main").Logger()
 
 var (
-	listenAddrAPI       string
-	kafkaBrokerURL      string
-	kafkaTopic          string
-	kafkaPubMessageType string
-	pubPartition        string
+	listenAddrAPI  string
+	kafkaBrokerURL string
+	kafkaTopic     string
 )
 
 func main() {
@@ -37,8 +35,6 @@ func main() {
 	listenAddrAPI = viper.GetString("listenAddrAPI")
 	kafkaBrokerURL = viper.GetString("kafkaBrokerURL")
 	kafkaTopic = viper.GetString("kafkaTopic")
-	kafkaPubMessageType = viper.GetString("kafkaPubMessageType")
-	pubPartition = viper.GetString("pubPartition")
 
 	producer.Init(kafkaBrokerURL)
 	defer producer.P.Close()
@@ -84,14 +80,16 @@ func postDataToKafka(ctx *gin.Context) {
 	defer parent.Done()
 
 	form := &struct {
-		Requestid     string `json:"request_id"`
-		Topicname     string `json:"topic_name"`
-		Messagebody   string `json:"message_body"`
-		Transactionid string `json:"transaction_id"`
-		Email         string `json:"email"`
-		Phone         string `json:"phone"`
-		Customerid    string `json:"customer_id"`
-		Key           string `json:"key"`
+		Requestid      string `json:"request_id"`
+		Topicname      string `json:"topic_name"`
+		Messagebody    string `json:"message_body"`
+		Transactionid  string `json:"transaction_id"`
+		Email          string `json:"email"`
+		Phone          string `json:"phone"`
+		Customerid     string `json:"customer_id"`
+		Key            string `json:"key"`
+		PubMessageType string `json:"pubMessageType"`
+		PubPartition   string `json:"pubPartition"`
 	}{}
 
 	ctx.Bind(form)
@@ -111,7 +109,7 @@ func postDataToKafka(ctx *gin.Context) {
 
 	value := string(formInBytes)
 	kafkaTopic = form.Topicname
-	message := factory.GetMessage(kafkaPubMessageType, form.Key, pubPartition, kafkaTopic, value)
+	message := factory.GetMessage(form.PubMessageType, form.Key, form.PubPartition, kafkaTopic, value)
 
 	err = producer.P.Produce(&message, deliveryChan)
 
