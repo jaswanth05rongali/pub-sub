@@ -32,6 +32,11 @@ func Init(broker string, group string) {
 	fmt.Printf("Created Consumer %v\n", C)
 }
 
+//GetConsumer returns the consumer variable
+func GetConsumer() *kafka.Consumer {
+	return C
+}
+
 //Consume will help consuming messages from the cluster and also in sending them to the clients
 func Consume() {
 	client.Init()

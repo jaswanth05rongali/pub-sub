@@ -37,7 +37,7 @@ func main() {
 	kafkaTopic = viper.GetString("kafkaTopic")
 
 	producer.Init(kafkaBrokerURL)
-	defer producer.P.Close()
+	defer producer.GetProducer().Close()
 
 	errChan := make(chan error, 1)
 
@@ -111,7 +111,7 @@ func postDataToKafka(ctx *gin.Context) {
 	kafkaTopic = form.Topicname
 	message := factory.GetMessage(form.PubMessageType, form.Key, form.PubPartition, kafkaTopic, value)
 
-	err = producer.P.Produce(&message, deliveryChan)
+	err = producer.GetProducer().Produce(&message, deliveryChan)
 
 	if err != nil {
 		ctx.JSON(http.StatusUnprocessableEntity, map[string]interface{}{
