@@ -4,9 +4,7 @@
             "source":{
                 "listenAddrAPI": "0.0.0.0:9000",
                 "kafkaBrokerURL": "localhost:19092",
-                "kafkaTopic": "foo",
-                "kafkaPubMessageType": "0",
-                "pubPartition": "0"
+                "kafkaTopic": "foo"
             }
         }
     ],
