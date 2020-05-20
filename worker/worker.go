@@ -22,6 +22,7 @@ func Init(broker string, group string) {
 		"broker.address.family": "v4",
 		"group.id":              group,
 		"session.timeout.ms":    6000,
+		"enable.auto.commit":    false,
 		"auto.offset.reset":     "latest"})
 
 	if err != nil {
