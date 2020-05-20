@@ -16,7 +16,7 @@
                 "topic": "foo",
                 "serverRunTime": 120,
                 "serverDownTime": 30,
-                "waitTime": 60
+                "waitTime": 10
             }
         }
     ]

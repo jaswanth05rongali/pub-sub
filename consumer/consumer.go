@@ -19,7 +19,7 @@ func main() {
 
 	worker.Init(broker, group)
 
-	err := worker.C.Subscribe(topics, nil)
+	err := worker.GetConsumer().Subscribe(topics, nil)
 	if err != nil {
 		fmt.Printf("Error:%v while subscribing to topic:%v", err, topics)
 	}
