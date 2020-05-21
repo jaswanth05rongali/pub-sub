@@ -14,6 +14,8 @@ import (
 // C stores the created producer instance
 var C *kafka.Consumer
 
+var cli *client.Object
+
 //Init will initialize the consumer function
 func Init(broker string, group string) {
 	var err error
@@ -40,7 +42,7 @@ func GetConsumer() *kafka.Consumer {
 
 //Consume will help consuming messages from the cluster and also in sending them to the clients
 func Consume() {
-	client.Init()
+	cli.Init()
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
@@ -61,9 +63,12 @@ func Consume() {
 				message := string(e.Value)
 				fmt.Printf("%% Message on %s:\n%s\n",
 					e.TopicPartition, message)
-				sentStatus := client.SendMessage(message)
+				sentStatus := cli.SendMessage(message)
 				if !sentStatus {
-					client.RetrySendingMessage(message)
+					checkRetry := cli.RetrySendingMessage(message)
+					if !checkRetry {
+						cli.SaveToFile(message)
+					}
 				}
 				C.Commit()
 				if e.Headers != nil {
