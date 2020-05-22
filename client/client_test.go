@@ -1,10 +1,13 @@
 package client
 
 import (
+	"fmt"
 	"testing"
+
+	"github.com/spf13/viper"
 )
 
-var cli *Object
+var cli Object
 
 func TestSendMessage(t *testing.T) {
 	if cli.getServerStatus() == cli.SendMessage("{\"request_id\":\"1\",\"topic_name\":\"foo\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"1254\",\"pubMessageType\":\"0\",\"pubPartition\":\"3\"}") {
@@ -15,10 +18,14 @@ func TestSendMessage(t *testing.T) {
 }
 
 func TestRetrySendingMessage(t *testing.T) {
+	viper.Set("numberOfRetries", 1)
+	cli.Init()
 	if cli.getServerStatus() {
+		fmt.Println(cli.getServerStatus())
 		if cli.RetrySendingMessage("{\"request_id\":\"1\",\"topic_name\":\"foo\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"1254\",\"pubMessageType\":\"0\",\"pubPartition\":\"3\"}") {
 			t.Logf("Retry Sending Message working fine.\n")
 		} else {
+
 			t.Errorf("Expected success from RetrySendingMessage but failed.\n")
 		}
 	} else {
