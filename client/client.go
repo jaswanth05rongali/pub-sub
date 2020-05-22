@@ -73,14 +73,14 @@ func (c *Object) getMessageDetails(value string) (string, string, string, string
 //SendMessage will check for the client. If it is up and running then the func sends the message to the client and returns a true value. If client is down, it returns a false.
 func (c *Object) SendMessage(message string) bool {
 
-	messageBody, emailID, requestBody, _ := c.getMessageDetails(message)
+	requestID, messageBody, emailID, _ := c.getMessageDetails(message)
 
 	if c.getServerStatus() {
-		fmt.Printf("Message: '%v' sent successfully to %v. Request ID: %v\n", messageBody, emailID, requestBody)
+		fmt.Printf("Message: '%v' sent successfully to %v. Request ID: %v\n", messageBody, emailID, requestID)
 		return true
 	}
 
-	fmt.Printf("Message: '%v' delivery to %v failed. Server Down!! Request ID: %v\n", messageBody, emailID, requestBody)
+	fmt.Printf("Message: '%v' delivery to %v failed. Server Down!! Request ID: %v\n", messageBody, emailID, requestID)
 	return false
 }
 
@@ -88,11 +88,12 @@ func (c *Object) SendMessage(message string) bool {
 func (c *Object) RetrySendingMessage(message string) bool {
 	numberOfRetries := viper.GetInt("numberOfRetries")
 	for i := 0; i < numberOfRetries; i++ {
+		time.Sleep(time.Duration(waitTime) * time.Second)
+		fmt.Printf("Retry - %v:\n", i+1)
 		sent := c.SendMessage(message)
 		if sent {
 			return true
 		}
-		time.Sleep(time.Duration(waitTime) * time.Second)
 	}
 
 	return false
