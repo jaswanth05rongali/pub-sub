@@ -5,7 +5,7 @@ import (
 )
 
 func TestInit(t *testing.T) {
-	broker := "localhost:2120"
+	broker := "localhost:19092"
 	group := "Email"
 	Init(broker, group)
 	switch GetConsumer().String() {
@@ -25,5 +25,9 @@ func TestInit(t *testing.T) {
 }
 
 func TestConsume(t *testing.T) {
+	// mockCtrl := gomock.NewController(t)
+	// defer mockCtrl.Finish()
+
+	// mockInterface := mocks.NewMockInterface(mockCtrl)
 
 }

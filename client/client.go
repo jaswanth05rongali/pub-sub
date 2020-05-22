@@ -15,6 +15,7 @@ type Interface interface {
 	Init()
 	SendMessage(string) bool
 	RetrySendingMessage(string) bool
+	SaveToFile(string) error
 }
 
 //Object creates and holds the entire client package
@@ -98,20 +99,24 @@ func (c *Object) RetrySendingMessage(message string) bool {
 }
 
 //SaveToFile will save a discarded message to a file
-func (c *Object) SaveToFile(message string) {
+func (c *Object) SaveToFile(message string) error {
 
 	requestID, _, _, _ := c.getMessageDetails(message)
 
 	f, err := os.OpenFile("failed.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
+		return err
 	}
 	if _, err := f.Write([]byte(message)); err != nil {
 		log.Fatal(err)
-	} else {
-		fmt.Printf("The Delivery of message with Request ID:%v, to the client has been failed. Storing it in a file - failed.log", requestID)
+		return err
 	}
 	if err := f.Close(); err != nil {
 		log.Fatal(err)
+		return err
 	}
+
+	fmt.Printf("The Delivery of message with Request ID:%v, to the client has been failed. Storing it in a file - failed.log", requestID)
+	return nil
 }

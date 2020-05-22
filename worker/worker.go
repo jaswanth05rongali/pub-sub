@@ -7,12 +7,17 @@ import (
 	"syscall"
 
 	"github.com/jaswanth05rongali/pub-sub/client"
+	"github.com/rs/zerolog/log"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
 // C stores the created producer instance
 var C *kafka.Consumer
+
+//ConsumerObject defines a struct for entire consumer along with few methodsC
+// type ConsumerObject struct {
+// }
 
 var cli *client.Object
 
@@ -67,7 +72,10 @@ func Consume() {
 				if !sentStatus {
 					checkRetry := cli.RetrySendingMessage(message)
 					if !checkRetry {
-						cli.SaveToFile(message)
+						err := cli.SaveToFile(message)
+						if err != nil {
+							log.Error().Err(err).Msgf("Error while saving failed message to log file.")
+						}
 					}
 				}
 				C.Commit()
