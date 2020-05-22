@@ -7,12 +7,19 @@ import (
 	"syscall"
 
 	"github.com/jaswanth05rongali/pub-sub/client"
+	"github.com/rs/zerolog/log"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
 // C stores the created producer instance
 var C *kafka.Consumer
+
+//ConsumerObject defines a struct for entire consumer along with few methodsC
+// type ConsumerObject struct {
+// }
+
+var cli *client.Object
 
 //Init will initialize the consumer function
 func Init(broker string, group string) {
@@ -40,7 +47,7 @@ func GetConsumer() *kafka.Consumer {
 
 //Consume will help consuming messages from the cluster and also in sending them to the clients
 func Consume() {
-	client.Init()
+	cli.Init()
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
@@ -61,9 +68,15 @@ func Consume() {
 				message := string(e.Value)
 				fmt.Printf("%% Message on %s:\n%s\n",
 					e.TopicPartition, message)
-				sentStatus := client.SendMessage(message)
+				sentStatus := cli.SendMessage(message)
 				if !sentStatus {
-					client.RetrySendingMessage(message)
+					checkRetry := cli.RetrySendingMessage(message)
+					if !checkRetry {
+						err := cli.SaveToFile(message)
+						if err != nil {
+							log.Error().Err(err).Msgf("Error while saving failed message to log file.")
+						}
+					}
 				}
 				C.Commit()
 				if e.Headers != nil {

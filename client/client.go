@@ -2,11 +2,25 @@ package client
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"strings"
 	"time"
 
 	"github.com/spf13/viper"
 )
+
+//Interface defines an interface for client Object
+type Interface interface {
+	Init()
+	SendMessage(string) bool
+	RetrySendingMessage(string) bool
+	SaveToFile(string) error
+}
+
+//Object creates and holds the entire client package
+type Object struct {
+}
 
 var (
 	serverStatus   bool
@@ -17,7 +31,7 @@ var (
 )
 
 //Init will initialize the client variables
-func Init() {
+func (c *Object) Init() {
 	serverStatus = true
 	prevServerTime = time.Now().Unix()
 	serverRunTime = viper.GetInt64("serverRunTime")
@@ -25,7 +39,7 @@ func Init() {
 	waitTime = viper.GetInt64("waitTime")
 }
 
-func getServerStatus() bool {
+func (c *Object) getServerStatus() bool {
 	currentTime := time.Now().Unix()
 	if serverStatus {
 		if currentTime > (prevServerTime + serverRunTime) {
@@ -42,9 +56,7 @@ func getServerStatus() bool {
 	return serverStatus
 }
 
-//SendMessage will check for the client. If it is up and running then the func sends the message to the client and returns a true value. If client is down, it returns a false.
-func SendMessage(value string) bool {
-
+func (c *Object) getMessageDetails(value string) (string, string, string, string) {
 	dataStrings := strings.Split(strings.Split(strings.Split(value, "{")[1], "}")[0], ",")
 	requestString := strings.Split(dataStrings[0], ":")[1]
 	requestBody := requestString[1 : len(requestString)-1]
@@ -52,9 +64,18 @@ func SendMessage(value string) bool {
 	messageBody := messageString[1 : len(messageString)-1]
 	emailString := strings.Split(dataStrings[4], ":")[1]
 	emailID := emailString[1 : len(emailString)-1]
-	// phoneNumber := strings.Split(strings.Split(dataStrings[5],":")[1],"'")[1]
+	phoneString := strings.Split(dataStrings[5], ":")[1]
+	phoneNumber := phoneString[1 : len(phoneString)-1]
 
-	if getServerStatus() {
+	return requestBody, messageBody, emailID, phoneNumber
+}
+
+//SendMessage will check for the client. If it is up and running then the func sends the message to the client and returns a true value. If client is down, it returns a false.
+func (c *Object) SendMessage(message string) bool {
+
+	messageBody, emailID, requestBody, _ := c.getMessageDetails(message)
+
+	if c.getServerStatus() {
 		fmt.Printf("Message: '%v' sent successfully to %v. Request ID: %v\n", messageBody, emailID, requestBody)
 		return true
 	}
@@ -64,12 +85,38 @@ func SendMessage(value string) bool {
 }
 
 //RetrySendingMessage will try resending the messages
-func RetrySendingMessage(message string) {
-	for {
-		sent := SendMessage(message)
+func (c *Object) RetrySendingMessage(message string) bool {
+	numberOfRetries := viper.GetInt("numberOfRetries")
+	for i := 0; i < numberOfRetries; i++ {
+		sent := c.SendMessage(message)
 		if sent {
-			break
+			return true
 		}
 		time.Sleep(time.Duration(waitTime) * time.Second)
 	}
+
+	return false
+}
+
+//SaveToFile will save a discarded message to a file
+func (c *Object) SaveToFile(message string) error {
+
+	requestID, _, _, _ := c.getMessageDetails(message)
+
+	f, err := os.OpenFile("failed.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	if _, err := f.Write([]byte(message)); err != nil {
+		log.Fatal(err)
+		return err
+	}
+	if err := f.Close(); err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	fmt.Printf("The Delivery of message with Request ID:%v, to the client has been failed. Storing it in a file - failed.log", requestID)
+	return nil
 }
