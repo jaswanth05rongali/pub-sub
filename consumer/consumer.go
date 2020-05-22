@@ -30,5 +30,5 @@ func main() {
 		fmt.Printf("Error:%v while subscribing to topic:%v", err, topics)
 	}
 
-	consumer.Consume()
+	consumer.Consume(false)
 }

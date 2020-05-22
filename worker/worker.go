@@ -45,14 +45,19 @@ func (cons *ConsumerObject) GetConsumer() *kafka.Consumer {
 }
 
 //Consume will help consuming messages from the cluster and also in sending them to the clients
-func (cons *ConsumerObject) Consume() {
+func (cons *ConsumerObject) Consume(testCall bool) {
 
 	cons.ClientInterface.Init()
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
+	iterations := 0
 	run := true
 	for run {
+		if testCall && iterations == 10 {
+			break
+		}
+		iterations++
 		select {
 		case sig := <-sigchan:
 			fmt.Printf("Caught signal %v: terminating\n", sig)
