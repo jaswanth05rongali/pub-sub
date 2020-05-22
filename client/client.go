@@ -31,7 +31,7 @@ var (
 )
 
 //Init will initialize the client variables
-func (c *Object) Init() {
+func (c Object) Init() {
 	serverStatus = true
 	prevServerTime = time.Now().Unix()
 	serverRunTime = viper.GetInt64("serverRunTime")
@@ -39,7 +39,7 @@ func (c *Object) Init() {
 	waitTime = viper.GetInt64("waitTime")
 }
 
-func (c *Object) getServerStatus() bool {
+func (c Object) getServerStatus() bool {
 	currentTime := time.Now().Unix()
 	if serverStatus {
 		if currentTime > (prevServerTime + serverRunTime) {
@@ -56,7 +56,7 @@ func (c *Object) getServerStatus() bool {
 	return serverStatus
 }
 
-func (c *Object) getMessageDetails(value string) (string, string, string, string) {
+func (c Object) getMessageDetails(value string) (string, string, string, string) {
 	dataStrings := strings.Split(strings.Split(strings.Split(value, "{")[1], "}")[0], ",")
 	requestString := strings.Split(dataStrings[0], ":")[1]
 	requestBody := requestString[1 : len(requestString)-1]
@@ -71,7 +71,7 @@ func (c *Object) getMessageDetails(value string) (string, string, string, string
 }
 
 //SendMessage will check for the client. If it is up and running then the func sends the message to the client and returns a true value. If client is down, it returns a false.
-func (c *Object) SendMessage(message string) bool {
+func (c Object) SendMessage(message string) bool {
 
 	requestID, messageBody, emailID, _ := c.getMessageDetails(message)
 
@@ -85,7 +85,7 @@ func (c *Object) SendMessage(message string) bool {
 }
 
 //RetrySendingMessage will try resending the messages
-func (c *Object) RetrySendingMessage(message string) bool {
+func (c Object) RetrySendingMessage(message string) bool {
 	numberOfRetries := viper.GetInt("numberOfRetries")
 	for i := 0; i < numberOfRetries; i++ {
 		time.Sleep(time.Duration(waitTime) * time.Second)
@@ -100,7 +100,7 @@ func (c *Object) RetrySendingMessage(message string) bool {
 }
 
 //SaveToFile will save a discarded message to a file
-func (c *Object) SaveToFile(message string) error {
+func (c Object) SaveToFile(message string) error {
 
 	requestID, _, _, _ := c.getMessageDetails(message)
 
@@ -118,6 +118,6 @@ func (c *Object) SaveToFile(message string) error {
 		return err
 	}
 
-	fmt.Printf("The Delivery of message with Request ID:%v, to the client has been failed. Storing it in a file - failed.log", requestID)
+	fmt.Printf("The Delivery of message with Request ID:%v, to the client has been failed. Storing it in a file - failed.log\n", requestID)
 	return nil
 }

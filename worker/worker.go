@@ -16,13 +16,12 @@ import (
 var C *kafka.Consumer
 
 //ConsumerObject defines a struct for entire consumer along with few methodsC
-// type ConsumerObject struct {
-// }
-
-var cli *client.Object
+type ConsumerObject struct {
+	ClientInterface client.Interface
+}
 
 //Init will initialize the consumer function
-func Init(broker string, group string) {
+func (cons *ConsumerObject) Init(broker string, group string) {
 	var err error
 	C, err = kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers":     broker,
@@ -41,13 +40,14 @@ func Init(broker string, group string) {
 }
 
 //GetConsumer returns the consumer variable
-func GetConsumer() *kafka.Consumer {
+func (cons *ConsumerObject) GetConsumer() *kafka.Consumer {
 	return C
 }
 
 //Consume will help consuming messages from the cluster and also in sending them to the clients
-func Consume() {
-	cli.Init()
+func (cons *ConsumerObject) Consume() {
+
+	cons.ClientInterface.Init()
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
@@ -68,11 +68,11 @@ func Consume() {
 				message := string(e.Value)
 				fmt.Printf("%% Message on %s:\n%s\n",
 					e.TopicPartition, message)
-				sentStatus := cli.SendMessage(message)
+				sentStatus := cons.ClientInterface.SendMessage(message)
 				if !sentStatus {
-					checkRetry := cli.RetrySendingMessage(message)
+					checkRetry := cons.ClientInterface.RetrySendingMessage(message)
 					if !checkRetry {
-						err := cli.SaveToFile(message)
+						err := cons.ClientInterface.SaveToFile(message)
 						if err != nil {
 							log.Error().Err(err).Msgf("Error while saving failed message to log file.")
 						}
