@@ -6,19 +6,25 @@ import (
 	"github.com/jaswanth05rongali/pub-sub/client"
 	"github.com/jaswanth05rongali/pub-sub/config"
 	"github.com/jaswanth05rongali/pub-sub/worker"
+	"github.com/namsral/flag"
 
 	"github.com/spf13/viper"
 )
 
 var consumer *worker.ConsumerObject
 
+var topics string
+
 func main() {
+
+	flag.StringVar(&topics, "topic", "Email", "Gets the topic from command line")
+	flag.Parse()
 
 	config.Init(false)
 
 	broker := viper.GetString("broker")
-	group := viper.GetString("group")
-	topics := viper.GetString("topic")
+	group := topics + "Group"
+	// topics := viper.GetString("topic")
 
 	client := client.Object{}
 	consumer = &worker.ConsumerObject{ClientInterface: client}

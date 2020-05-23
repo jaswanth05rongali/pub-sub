@@ -50,6 +50,7 @@
                 KAFKA_BROKER_ID: 1
                 KAFKA_ZOOKEEPER_CONNECT: 192.168.0.105:22181,192.168.0.105:32181,192.168.0.105:42181
                 KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.105:19092
+                KAFKA_DELETE_TOPIC_ENABLE: "true" 
 
         kafka-2:
             image: confluentinc/cp-kafka:3.0.1
@@ -63,6 +64,7 @@
                 KAFKA_BROKER_ID: 2
                 KAFKA_ZOOKEEPER_CONNECT: 192.168.0.105:22181,192.168.0.105:32181,192.168.0.105:42181
                 KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.105:29092
+                KAFKA_DELETE_TOPIC_ENABLE: "true" 
         
         kafka-3:
             image: confluentinc/cp-kafka:3.0.1
@@ -76,3 +78,4 @@
                 KAFKA_BROKER_ID: 3
                 KAFKA_ZOOKEEPER_CONNECT: 192.168.0.105:22181,192.168.0.105:32181,192.168.0.105:42181
                 KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.105:39092
+                KAFKA_DELETE_TOPIC_ENABLE: "true" 

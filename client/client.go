@@ -56,10 +56,12 @@ func (c Object) getServerStatus() bool {
 	return serverStatus
 }
 
-func (c Object) getMessageDetails(value string) (string, string, string, string) {
+func (c Object) getMessageDetails(value string) (string, string, string, string, string) {
 	dataStrings := strings.Split(strings.Split(strings.Split(value, "{")[1], "}")[0], ",")
 	requestString := strings.Split(dataStrings[0], ":")[1]
-	requestBody := requestString[1 : len(requestString)-1]
+	requestID := requestString[1 : len(requestString)-1]
+	topicString := strings.Split(dataStrings[1], ":")[1]
+	topicName := topicString[1 : len(topicString)-1]
 	messageString := strings.Split(dataStrings[2], ":")[1]
 	messageBody := messageString[1 : len(messageString)-1]
 	emailString := strings.Split(dataStrings[4], ":")[1]
@@ -67,20 +69,27 @@ func (c Object) getMessageDetails(value string) (string, string, string, string)
 	phoneString := strings.Split(dataStrings[5], ":")[1]
 	phoneNumber := phoneString[1 : len(phoneString)-1]
 
-	return requestBody, messageBody, emailID, phoneNumber
+	return requestID, topicName, messageBody, emailID, phoneNumber
 }
 
 //SendMessage will check for the client. If it is up and running then the func sends the message to the client and returns a true value. If client is down, it returns a false.
 func (c Object) SendMessage(message string) bool {
 
-	requestID, messageBody, emailID, _ := c.getMessageDetails(message)
+	requestID, topicName, messageBody, emailID, phoneNumber := c.getMessageDetails(message)
+
+	var customerDetail string
+	if topicName == "Phone" {
+		customerDetail = phoneNumber
+	} else {
+		customerDetail = emailID
+	}
 
 	if c.getServerStatus() {
-		fmt.Printf("Message: '%v' sent successfully to %v. Request ID: %v\n", messageBody, emailID, requestID)
+		fmt.Printf("Message: '%v' sent successfully to %v. Request ID: %v\n", messageBody, customerDetail, requestID)
 		return true
 	}
 
-	fmt.Printf("Message: '%v' delivery to %v failed. Server Down!! Request ID: %v\n", messageBody, emailID, requestID)
+	fmt.Printf("Message: '%v' delivery to %v failed. Server Down!! Request ID: %v\n", messageBody, customerDetail, requestID)
 	return false
 }
 
@@ -102,7 +111,7 @@ func (c Object) RetrySendingMessage(message string) bool {
 //SaveToFile will save a discarded message to a file
 func (c Object) SaveToFile(message string) error {
 
-	requestID, _, _, _ := c.getMessageDetails(message)
+	requestID, _, _, _, _ := c.getMessageDetails(message)
 
 	f, err := os.OpenFile("failed.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {

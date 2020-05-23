@@ -4,7 +4,7 @@
             "source":{
                 "listenAddrAPI": "0.0.0.0:9000",
                 "kafkaBrokerURL": "localhost:19092",
-                "kafkaTopic": "foo"
+                "kafkaTopic": "Email"
             }
         }
     ],
@@ -12,8 +12,6 @@
         {
             "source":{
                 "broker": "localhost:19092",
-                "group": "my-Group",
-                "topic": "foo",
                 "serverRunTime": 120,
                 "serverDownTime": 30,
                 "waitTime": 10,
