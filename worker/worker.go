@@ -2,6 +2,7 @@ package worker
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"os/signal"
 	"syscall"
@@ -63,9 +64,31 @@ func (cons *ConsumerObject) Consume(testCall bool) {
 			fmt.Printf("Caught signal %v: terminating\n", sig)
 			run = false
 		default:
-			ev := C.Poll(100)
-			if ev == nil {
-				continue
+			var ev kafka.Event
+			if testCall {
+				var val kafka.Event
+
+				if rand.Intn(30) < 15 {
+					var message kafka.Message
+					topic := "newTopic"
+					message = kafka.Message{
+						TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: int32(0)},
+						Value:          []byte("{\"request_id\":\"1\",\"topic_name\":\"foo\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"1254\",\"pubMessageType\":\"0\",\"pubPartition\":\"3\"}"),
+						Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
+					}
+					val = &message
+				} else if rand.Intn(30) < 22 {
+					var er kafka.Error
+					val = er
+				} else {
+					val = nil
+				}
+				ev = val
+			} else {
+				ev = C.Poll(100)
+				if ev == nil {
+					continue
+				}
 			}
 
 			switch e := ev.(type) {
