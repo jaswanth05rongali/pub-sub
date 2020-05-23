@@ -48,8 +48,8 @@
                 - zk3
             environment:
                 KAFKA_BROKER_ID: 1
-                KAFKA_ZOOKEEPER_CONNECT: 192.168.0.105:22181,192.168.0.105:32181,192.168.0.105:42181
-                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.105:19092
+                KAFKA_ZOOKEEPER_CONNECT: 10.0.2.15:22181,10.0.2.15:32181,10.0.2.15:42181
+                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.0.2.15:19092
 
         kafka-2:
             image: confluentinc/cp-kafka:3.0.1
@@ -61,8 +61,8 @@
                 - zk3
             environment:
                 KAFKA_BROKER_ID: 2
-                KAFKA_ZOOKEEPER_CONNECT: 192.168.0.105:22181,192.168.0.105:32181,192.168.0.105:42181
-                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.105:29092
+                KAFKA_ZOOKEEPER_CONNECT: 10.0.2.15:22181,10.0.2.15:32181,10.0.2.15:42181
+                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.0.2.15:29092
         
         kafka-3:
             image: confluentinc/cp-kafka:3.0.1
@@ -74,5 +74,5 @@
                 - zk3
             environment:
                 KAFKA_BROKER_ID: 3
-                KAFKA_ZOOKEEPER_CONNECT: 192.168.0.105:22181,192.168.0.105:32181,192.168.0.105:42181
-                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.105:39092
+                KAFKA_ZOOKEEPER_CONNECT: 10.0.2.15:22181,10.0.2.15:32181,10.0.2.15:42181
+                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.0.2.15:39092

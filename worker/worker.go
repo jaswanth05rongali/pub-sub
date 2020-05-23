@@ -6,8 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/antigloss/go/logger"
 	"github.com/jaswanth05rongali/pub-sub/client"
-	"github.com/rs/zerolog/log"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
@@ -37,6 +37,7 @@ func (cons *ConsumerObject) Init(broker string, group string) {
 	}
 
 	fmt.Printf("Created Consumer %v\n", C)
+	logger.Info("Hello world")
 }
 
 //GetConsumer returns the consumer variable
@@ -79,7 +80,7 @@ func (cons *ConsumerObject) Consume(testCall bool) {
 					if !checkRetry {
 						err := cons.ClientInterface.SaveToFile(message)
 						if err != nil {
-							log.Error().Err(err).Msgf("Error while saving failed message to log file.")
+							//log.Error().Err(err).Msgf("Error while saving failed message to log file.")
 						}
 					}
 				}

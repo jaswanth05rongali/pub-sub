@@ -20,6 +20,7 @@ func Init(kafkaBrokerURL string) {
 	}
 
 	fmt.Printf("Created Producer %v\n", P)
+
 }
 
 //GetProducer returns the producer variable

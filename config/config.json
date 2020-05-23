@@ -3,7 +3,7 @@
         {
             "source":{
                 "listenAddrAPI": "0.0.0.0:9000",
-                "kafkaBrokerURL": "localhost:19092",
+                "kafkaBrokerURL": "10.0.2.15:19092",
                 "kafkaTopic": "foo"
             }
         }
@@ -11,7 +11,7 @@
     "consumer":[
         {
             "source":{
-                "broker": "localhost:19092",
+                "broker": "10.0.2.15:19092",
                 "group": "my-Group",
                 "topic": "foo",
                 "serverRunTime": 120,

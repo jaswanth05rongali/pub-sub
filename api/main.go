@@ -9,18 +9,17 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/antigloss/go/logger"
+	"github.com/gin-gonic/gin"
 	"github.com/jaswanth05rongali/pub-sub/config"
 	"github.com/jaswanth05rongali/pub-sub/factory"
 	"github.com/jaswanth05rongali/pub-sub/producer"
 
-	"github.com/gin-gonic/gin"
-
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
-var logger = log.With().Str("pkg", "main").Logger()
+//var logger = log.With().Str("pkg", "main").Logger()
 
 var (
 	listenAddrAPI  string
@@ -29,7 +28,7 @@ var (
 )
 
 func main() {
-
+	logger.Init("./log", 1, 1, 2, false)
 	config.Init(true)
 
 	listenAddrAPI = viper.GetString("listenAddrAPI")
@@ -40,9 +39,10 @@ func main() {
 	defer producer.GetProducer().Close()
 
 	errChan := make(chan error, 1)
-
 	go func() {
-		log.Info().Msgf("starting server at %s", listenAddrAPI)
+		logger.Info("Created Producer...\n")
+		logger.Info("starting server at %s", listenAddrAPI)
+		fmt.Printf("starting server at %s \n", listenAddrAPI)
 		errChan <- server(listenAddrAPI)
 	}()
 
@@ -50,10 +50,12 @@ func main() {
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 	select {
 	case <-signalChan:
-		logger.Info().Msg("got an interrupt, exiting...")
+		logger.Info("got an interrupt, exiting...")
+		fmt.Printf("got an interrupt, exiting...")
 	case err := <-errChan:
 		if err != nil {
-			logger.Error().Err(err).Msg("error while running api, exiting...")
+			//logger.Error().Err(err).Msg("error while running api, exiting...")
+			logger.Error("error while running api, exiting...")
 		}
 	}
 }
@@ -64,14 +66,13 @@ func server(listenAddr string) error {
 	router := gin.New()
 	router.POST("/api/v1/data", postDataToKafka)
 
-	for _, routeInfo := range router.Routes() {
+	/*	for _, routeInfo := range router.Routes() {
 		logger.Debug().
 			Str("path", routeInfo.Path).
 			Str("handler", routeInfo.Handler).
 			Str("method", routeInfo.Method).
 			Msg("registered routes")
-	}
-
+	}*/
 	return router.Run(listenAddr)
 }
 
@@ -128,6 +129,7 @@ func postDataToKafka(ctx *gin.Context) {
 	m := e.(*kafka.Message)
 
 	if m.TopicPartition.Error != nil {
+		logger.Info("Delivery failed: %v\n", m.TopicPartition.Error)
 		fmt.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
 		ctx.JSON(http.StatusOK, map[string]interface{}{
 			"success": false,
@@ -135,6 +137,9 @@ func postDataToKafka(ctx *gin.Context) {
 		})
 	} else {
 		fmt.Printf("Delivered message to topic %s [%d] at offset %v\n",
+			*m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
+
+		logger.Info("Delivered message to topic %s [%d] at offset %v\n",
 			*m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
 
 		ctx.JSON(http.StatusOK, map[string]interface{}{
