@@ -1,0 +1,65 @@
+{"level":"info","msg":"Starting Email Consumer......","time":"2020-05-24T23:51:38Z"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-24T23:51:38Z"}
+{"level":"info","msg":"Starting Phone Consumer......","time":"2020-05-24T23:51:41Z"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-24T23:51:41Z"}
+{"level":"info","msg":"% Message on Phone[0]@11:\n{\"request_id\":\"4\",\"topic_name\":\"Phone\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-24T23:51:45Z"}
+{"level":"info","msg":"% Message on Email[2]@15:\n{\"request_id\":\"4\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-24T23:52:27Z"}
+{"level":"info","msg":"Starting Email Consumer......","time":"2020-05-25T00:07:45Z"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T00:07:45Z"}
+{"level":"info","msg":"% Message on Email[2]@15:\n{\"request_id\":\"4\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:07:48Z"}
+{"level":"info","msg":"% Message on Email[3]@22:\n{\"request_id\":\"5\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:08:03Z"}
+{"level":"info","msg":"Starting Phone Consumer......","time":"2020-05-25T00:08:09Z"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T00:08:09Z"}
+{"level":"info","msg":"% Message on Phone[0]@11:\n{\"request_id\":\"4\",\"topic_name\":\"Phone\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:08:12Z"}
+{"level":"info","msg":"% Message on Phone[0]@12:\n{\"request_id\":\"4\",\"topic_name\":\"Phone\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:08:12Z"}
+{"level":"info","msg":"% Message on Phone[2]@10:\n{\"request_id\":\"5\",\"topic_name\":\"Phone\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:08:18Z"}
+{"level":"info","msg":"Caught signal interrupt: terminating","time":"2020-05-25T00:08:32Z"}
+{"level":"info","msg":"Closing consumer","time":"2020-05-25T00:08:32Z"}
+{"level":"info","msg":"Caught signal interrupt: terminating","time":"2020-05-25T00:08:36Z"}
+{"level":"info","msg":"Closing consumer","time":"2020-05-25T00:08:36Z"}
+{"level":"info","msg":"Starting Phone Consumer......","time":"2020-05-25T00:10:29Z"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T00:10:29Z"}
+{"level":"info","msg":"Caught signal interrupt: terminating","time":"2020-05-25T00:10:33Z"}
+{"level":"info","msg":"Closing consumer","time":"2020-05-25T00:10:33Z"}
+{"level":"info","msg":"Starting Email Consumer......","time":"2020-05-25T00:10:39Z"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T00:10:39Z"}
+{"level":"info","msg":"Starting Phone Consumer......","time":"2020-05-25T00:10:46Z"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T00:10:46Z"}
+{"level":"info","msg":"% Message on Email[1]@20:\n{\"request_id\":\"5\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:11:14Z"}
+{"level":"info","msg":"Starting Email Consumer......","time":"2020-05-25T00:17:46Z"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T00:17:46Z"}
+{"level":"info","msg":"% Message on Email[1]@20:\n{\"request_id\":\"5\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:17:49Z"}
+{"level":"info","msg":"Starting Email Consumer......","time":"2020-05-25T00:33:41Z"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T00:33:41Z"}
+{"level":"info","msg":"% Message on Email[1]@20:\n{\"request_id\":\"5\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:33:44Z"}
+{"level":"info","msg":"% Message on Email[1]@21:\n{\"request_id\":\"6\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:33:47Z"}
+{"level":"info","msg":"% Message on Email[3]@23:\n{\"request_id\":\"7\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:35:33Z"}
+{"level":"info","msg":"% Message on Email[1]@22:\n{\"request_id\":\"8\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:35:50Z"}
+{"level":"info","msg":"Starting Email Consumer......","time":"2020-05-25T00:36:34Z"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T00:36:34Z"}
+{"level":"info","msg":"% Message on Email[1]@22:\n{\"request_id\":\"8\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:36:37Z"}
+{"level":"info","msg":"Message: Transaction Successful sent successfully to kafka@gopostman.com. Request ID: 8","time":"2020-05-25T00:36:37Z"}
+{"level":"info","msg":"% Message on Email[2]@16:\n{\"request_id\":\"9\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:36:48Z"}
+{"level":"info","msg":"Message: Transaction Successful sent successfully to kafka@gopostman.com. Request ID: 9","time":"2020-05-25T00:36:48Z"}
+{"level":"info","msg":"Caught signal interrupt: terminating","time":"2020-05-25T00:38:33Z"}
+{"level":"info","msg":"Closing consumer","time":"2020-05-25T00:38:33Z"}
+{"level":"info","msg":"Starting Phone Consumer......","time":"2020-05-25T00:38:36Z"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T00:38:36Z"}
+{"level":"info","msg":"% Message on Phone[2]@11:\n{\"request_id\":\"8\",\"topic_name\":\"Phone\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:39:01Z"}
+{"level":"info","msg":"Message: Transaction Successful sent successfully to 9876543210. Request ID: 8","time":"2020-05-25T00:39:01Z"}
+{"level":"info","msg":"% Message on Phone[1]@11:\n{\"request_id\":\"9\",\"topic_name\":\"Phone\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:39:06Z"}
+{"level":"info","msg":"Message: Transaction Successful sent successfully to 9876543210. Request ID: 9","time":"2020-05-25T00:39:06Z"}
+{"level":"info","msg":"% Message on Email[1]@23:\n{\"request_id\":\"10\",\"topic_name\":\"Email\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"123\",\"pubMessageType\":\"0\",\"pubPartition\":\"1\"}","time":"2020-05-25T00:39:45Z"}
+{"level":"info","msg":"Message: Transaction Successful delivery to kafka@gopostman.com failed. Server Down!! Request ID: 10","time":"2020-05-25T00:39:45Z"}
+{"level":"info","msg":"Retry - 1:","time":"2020-05-25T00:39:55Z"}
+{"level":"info","msg":"Message: Transaction Successful delivery to kafka@gopostman.com failed. Server Down!! Request ID: 10","time":"2020-05-25T00:39:55Z"}
+{"level":"info","msg":"Retry - 2:","time":"2020-05-25T00:40:05Z"}
+{"level":"info","msg":"Message: Transaction Successful delivery to kafka@gopostman.com failed. Server Down!! Request ID: 10","time":"2020-05-25T00:40:05Z"}
+{"level":"info","msg":"Retry - 3:","time":"2020-05-25T00:40:15Z"}
+{"level":"info","msg":"Message: Transaction Successful delivery to kafka@gopostman.com failed. Server Down!! Request ID: 10","time":"2020-05-25T00:40:15Z"}
+{"level":"info","msg":"Retry - 4:","time":"2020-05-25T00:40:25Z"}
+{"level":"info","msg":"Message: Transaction Successful sent successfully to kafka@gopostman.com. Request ID: 10","time":"2020-05-25T00:40:25Z"}
+{"level":"info","msg":"Caught signal interrupt: terminating","time":"2020-05-25T00:40:42Z"}
+{"level":"info","msg":"Closing consumer","time":"2020-05-25T00:40:42Z"}
+{"level":"info","msg":"Caught signal interrupt: terminating","time":"2020-05-25T00:40:45Z"}
+{"level":"info","msg":"Closing consumer","time":"2020-05-25T00:40:45Z"}

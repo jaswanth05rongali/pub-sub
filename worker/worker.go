@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/jaswanth05rongali/pub-sub/client"
+	"github.com/jaswanth05rongali/pub-sub/logger"
 	"github.com/rs/zerolog/log"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
@@ -21,8 +22,11 @@ type ConsumerObject struct {
 	ClientInterface client.Interface
 }
 
+var workerLogger logger.Logger
+
 //Init will initialize the consumer function
 func (cons *ConsumerObject) Init(broker string, group string) {
+	workerLogger = logger.Getlogger()
 	var err error
 	C, err = kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers":     broker,
@@ -34,10 +38,12 @@ func (cons *ConsumerObject) Init(broker string, group string) {
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to create consumer: %s\n", err)
+		workerLogger.Errorf("Failed to create consumer: %s", err)
 		os.Exit(1)
 	}
 
 	fmt.Printf("Created Consumer %v\n", C)
+	workerLogger.Infof("Created Consumer %v", C)
 }
 
 //GetConsumer returns the consumer variable
@@ -46,8 +52,7 @@ func (cons *ConsumerObject) GetConsumer() *kafka.Consumer {
 }
 
 //Consume will help consuming messages from the cluster and also in sending them to the clients
-func (cons *ConsumerObject) Consume(testCall bool) {
-
+func (cons *ConsumerObject) Consume(testCall bool) string {
 	cons.ClientInterface.Init()
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
@@ -62,6 +67,7 @@ func (cons *ConsumerObject) Consume(testCall bool) {
 		select {
 		case sig := <-sigchan:
 			fmt.Printf("Caught signal %v: terminating\n", sig)
+			workerLogger.Infof("Caught signal %v: terminating", sig)
 			run = false
 		default:
 			var ev kafka.Event
@@ -96,6 +102,8 @@ func (cons *ConsumerObject) Consume(testCall bool) {
 				message := string(e.Value)
 				fmt.Printf("%% Message on %s:\n%s\n",
 					e.TopicPartition, message)
+				workerLogger.Infof("%% Message on %s:\n%s",
+					e.TopicPartition, message)
 				sentStatus := cons.ClientInterface.SendMessage(message)
 				if !sentStatus {
 					checkRetry := cons.ClientInterface.RetrySendingMessage(message)
@@ -103,24 +111,27 @@ func (cons *ConsumerObject) Consume(testCall bool) {
 						err := cons.ClientInterface.SaveToFile(message)
 						if err != nil {
 							log.Error().Err(err).Msgf("Error while saving failed message to log file.")
+							workerLogger.Errorf("Error while saving failed message to log file.")
 						}
 					}
 				}
 				C.Commit()
 				if e.Headers != nil {
 					fmt.Printf("%% Headers: %v\n", e.Headers)
+					workerLogger.Infof("%% Headers: %v", e.Headers)
 				}
 			case kafka.Error:
 				fmt.Fprintf(os.Stderr, "%% Error: %v: %v\n", e.Code(), e)
+				workerLogger.Errorf("%% Error: %v: %v", e.Code(), e)
 				if e.Code() == kafka.ErrAllBrokersDown {
 					run = false
 				}
 			default:
 				fmt.Printf("Ignored %v\n", e)
+				workerLogger.Infof("Ignored %v", e)
 			}
 		}
 	}
 
-	fmt.Printf("Closing consumer\n")
-	C.Close()
+	return "Closing consumer"
 }

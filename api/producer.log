@@ -1,0 +1,22 @@
+{"level":"info","msg":"Starting API......","time":"2020-05-24T23:31:30Z"}
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-24T23:31:30Z"}
+{"level":"info","msg":"starting server at 0.0.0.0:9000","time":"2020-05-24T23:31:30Z"}
+{"level":"debug","msg":"Path: /api/v1/data, handler: main.postDataToKafka, method: POST, registered routes.","time":"2020-05-24T23:31:30Z"}
+{"level":"info","msg":"Delivered message to topic Phone [0] at offset 11","time":"2020-05-24T23:31:42Z"}
+{"level":"info","msg":"got an interrupt, exiting...","time":"2020-05-24T23:31:52Z"}
+{"level":"info","msg":"Starting API......","time":"2020-05-24T23:50:57Z"}
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-24T23:50:57Z"}
+{"level":"info","msg":"starting server at 0.0.0.0:9000","time":"2020-05-24T23:50:57Z"}
+{"level":"debug","msg":"Path: /api/v1/data, handler: main.postDataToKafka, method: POST, registered routes.","time":"2020-05-24T23:50:57Z"}
+{"level":"info","msg":"Delivered message to topic Phone [0] at offset 12","time":"2020-05-24T23:51:56Z"}
+{"level":"info","msg":"Delivered message to topic Email [2] at offset 15","time":"2020-05-24T23:52:27Z"}
+{"level":"info","msg":"Delivered message to topic Email [3] at offset 22","time":"2020-05-25T00:08:03Z"}
+{"level":"info","msg":"Delivered message to topic Phone [2] at offset 10","time":"2020-05-25T00:08:18Z"}
+{"level":"info","msg":"Delivered message to topic Email [1] at offset 20","time":"2020-05-25T00:11:14Z"}
+{"level":"info","msg":"Delivered message to topic Email [1] at offset 21","time":"2020-05-25T00:33:47Z"}
+{"level":"info","msg":"Delivered message to topic Email [3] at offset 23","time":"2020-05-25T00:35:33Z"}
+{"level":"info","msg":"Delivered message to topic Email [1] at offset 22","time":"2020-05-25T00:35:50Z"}
+{"level":"info","msg":"Delivered message to topic Email [2] at offset 16","time":"2020-05-25T00:36:48Z"}
+{"level":"info","msg":"Delivered message to topic Phone [2] at offset 11","time":"2020-05-25T00:39:01Z"}
+{"level":"info","msg":"Delivered message to topic Phone [1] at offset 11","time":"2020-05-25T00:39:06Z"}
+{"level":"info","msg":"Delivered message to topic Email [1] at offset 23","time":"2020-05-25T00:39:45Z"}
