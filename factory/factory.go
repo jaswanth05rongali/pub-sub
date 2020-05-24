@@ -13,13 +13,6 @@ var logger = log.With().Str("pkg", "main").Logger()
 func GetMessage(kafkaPubMessageType string, key string, pubPartition string, kafkaTopic string, value string) kafka.Message {
 	var message kafka.Message
 	switch kafkaPubMessageType {
-	case "0":
-		message = kafka.Message{
-			TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: kafka.PartitionAny},
-			Value:          []byte(value),
-			Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
-		}
-
 	case "1":
 		key := key
 		message = kafka.Message{
@@ -30,17 +23,21 @@ func GetMessage(kafkaPubMessageType string, key string, pubPartition string, kaf
 		}
 
 	default:
-		par, er := strconv.Atoi(pubPartition)
-		part := int32(par)
-		if er != nil {
-			logger.Error().Err(er).Msg("error while converting partitionToPublish to int, exiting...")
+		var part int32
+		if kafkaPubMessageType == "0" {
+			part = kafka.PartitionAny
+		} else {
+			par, er := strconv.Atoi(pubPartition)
+			part = int32(par)
+			if er != nil {
+				logger.Error().Err(er).Msg("error while converting partitionToPublish to int, exiting...")
+			}
 		}
 		message = kafka.Message{
 			TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: part},
 			Value:          []byte(value),
 			Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
 		}
-
 	}
 	return message
 }

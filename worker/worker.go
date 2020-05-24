@@ -46,7 +46,7 @@ func (cons *ConsumerObject) GetConsumer() *kafka.Consumer {
 }
 
 //Consume will help consuming messages from the cluster and also in sending them to the clients
-func (cons *ConsumerObject) Consume(testCall bool) {
+func (cons *ConsumerObject) Consume(testCall bool) string {
 
 	cons.ClientInterface.Init()
 	sigchan := make(chan os.Signal, 1)
@@ -121,6 +121,5 @@ func (cons *ConsumerObject) Consume(testCall bool) {
 		}
 	}
 
-	fmt.Printf("Closing consumer\n")
-	C.Close()
+	return "Closing consumer"
 }

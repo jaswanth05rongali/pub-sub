@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -43,5 +44,5 @@ func TestConsume(t *testing.T) {
 	mockInterface.EXPECT().RetrySendingMessage("{\"request_id\":\"1\",\"topic_name\":\"foo\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"1254\",\"pubMessageType\":\"0\",\"pubPartition\":\"3\"}").Return(false).AnyTimes()
 	mockInterface.EXPECT().SaveToFile("{\"request_id\":\"1\",\"topic_name\":\"foo\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"1254\",\"pubMessageType\":\"0\",\"pubPartition\":\"3\"}").Return(nil).AnyTimes()
 
-	testConsumer.Consume(true)
+	fmt.Println(testConsumer.Consume(true))
 }

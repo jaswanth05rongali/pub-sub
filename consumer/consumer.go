@@ -36,5 +36,12 @@ func main() {
 		fmt.Printf("Error:%v while subscribing to topic:%v", err, topics)
 	}
 
-	consumer.Consume(false)
+	consumerChan := make(chan string)
+
+	go func() {
+		consumerChan <- consumer.Consume(false)
+	}()
+
+	fmt.Println(<-consumerChan)
+	consumer.GetConsumer().Close()
 }
