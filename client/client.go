@@ -35,6 +35,7 @@ var clientLogger logger.Logger
 
 //Init will initialize the client variables
 func (c Object) Init() {
+	clientLogger = logger.Getlogger()
 	serverStatus = true
 	prevServerTime = time.Now().Unix()
 	serverRunTime = viper.GetInt64("serverRunTime")
@@ -77,8 +78,6 @@ func (c Object) getMessageDetails(value string) (string, string, string, string,
 
 //SendMessage will check for the client. If it is up and running then the func sends the message to the client and returns a true value. If client is down, it returns a false.
 func (c Object) SendMessage(message string) bool {
-	clientLogger = logger.Getlogger()
-
 	requestID, topicName, messageBody, emailID, phoneNumber := c.getMessageDetails(message)
 
 	var customerDetail string
@@ -101,7 +100,6 @@ func (c Object) SendMessage(message string) bool {
 
 //RetrySendingMessage will try resending the messages
 func (c Object) RetrySendingMessage(message string) bool {
-	clientLogger = logger.Getlogger()
 	numberOfRetries := viper.GetInt("numberOfRetries")
 	for i := 0; i < numberOfRetries; i++ {
 		time.Sleep(time.Duration(waitTime) * time.Second)
@@ -118,7 +116,6 @@ func (c Object) RetrySendingMessage(message string) bool {
 
 //SaveToFile will save a discarded message to a file
 func (c Object) SaveToFile(message string) error {
-	clientLogger = logger.Getlogger()
 	requestID, _, _, _, _ := c.getMessageDetails(message)
 
 	f, err := os.OpenFile("failed.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)

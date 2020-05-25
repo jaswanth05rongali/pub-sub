@@ -52,7 +52,7 @@ func NewLogger(FileLocation string) error {
 	stdOutHandler := os.Stdout
 	fileHandler := &lumberjack.Logger{
 		Filename:   FileLocation,
-		MaxSize:    100,
+		MaxSize:    2,
 		MaxBackups: 6,
 		Compress:   true,
 		MaxAge:     28,

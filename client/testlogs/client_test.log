@@ -2,3 +2,10 @@
 {"level":"info","msg":"Message: Transaction Successful delivery to kafka@gopostman.com failed. Server Down!! Request ID: 1","time":"2020-05-25T09:52:57+05:30"}
 {"level":"info","msg":"Message: Transaction Successful sent successfully to kafka@gopostman.com. Request ID: 1","time":"2020-05-25T10:08:15+05:30"}
 {"level":"info","msg":"Message: Transaction Successful delivery to kafka@gopostman.com failed. Server Down!! Request ID: 1","time":"2020-05-25T10:08:20+05:30"}
+{"level":"info","msg":"Message: Transaction Successful sent successfully to kafka@gopostman.com. Request ID: 1","time":"2020-05-25T12:13:59Z"}
+{"level":"info","msg":"Message: Transaction Successful delivery to kafka@gopostman.com failed. Server Down!! Request ID: 1","time":"2020-05-25T12:14:04Z"}
+{"level":"info","msg":"Retry - 1:","time":"2020-05-25T12:14:04Z"}
+{"level":"info","msg":"Message: Transaction Successful sent successfully to kafka@gopostman.com. Request ID: 1","time":"2020-05-25T12:14:04Z"}
+{"level":"info","msg":"Retry - 1:","time":"2020-05-25T12:14:09Z"}
+{"level":"info","msg":"Message: Transaction Successful delivery to kafka@gopostman.com failed. Server Down!! Request ID: 1","time":"2020-05-25T12:14:09Z"}
+{"level":"info","msg":"The Delivery of message with Request ID:1, to the client has been failed. Storing it in a file - failed.log","time":"2020-05-25T12:14:14Z"}
