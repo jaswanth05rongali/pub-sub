@@ -1,0 +1,14 @@
+{
+    "logger":[
+        {
+            "source":{
+                "EnableConsole": false,
+                "ConsoleLevel": "debug",
+		        "ConsoleJSONFormat": true,
+                "EnableFile": true,
+                "FileLevel": "info",
+                "FileJSONFormat": true 
+            }
+        }
+    ]
+}

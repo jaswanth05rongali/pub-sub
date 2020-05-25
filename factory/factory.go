@@ -3,14 +3,13 @@ package factory
 import (
 	"strconv"
 
-	"github.com/rs/zerolog/log"
+	"github.com/jaswanth05rongali/pub-sub/logger"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
-var logger = log.With().Str("pkg", "main").Logger()
-
 //GetMessage  returns the message format according to publishing type
 func GetMessage(kafkaPubMessageType string, key string, pubPartition string, kafkaTopic string, value string) kafka.Message {
+	factoryLogger := logger.Getlogger()
 	var message kafka.Message
 	switch kafkaPubMessageType {
 	case "1":
@@ -30,7 +29,7 @@ func GetMessage(kafkaPubMessageType string, key string, pubPartition string, kaf
 			par, er := strconv.Atoi(pubPartition)
 			part = int32(par)
 			if er != nil {
-				logger.Error().Err(er).Msg("error while converting partitionToPublish to int, exiting...")
+				factoryLogger.Errorf("error while converting partitionToPublish to int, exiting...")
 			}
 		}
 		message = kafka.Message{
