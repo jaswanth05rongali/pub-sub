@@ -11,7 +11,7 @@ import (
 
 //Init is a config intializer function
 func Init() {
-	jsonPath, _ := filepath.Abs("/home/jaswanth/Coding/intern/tutorial/GO/src/github.com/jaswanth05rongali/pub-sub/logger/loggerconfig/loggerConfig.json")
+	jsonPath, _ := filepath.Abs("../logger/loggerconfig/loggerConfig.json")
 	bodyBytes, err := ioutil.ReadFile(jsonPath)
 	if err != nil {
 		fmt.Println("Couldn't read local configuration json file.", err)
