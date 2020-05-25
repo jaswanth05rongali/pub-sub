@@ -1,17 +1,22 @@
 package config
 
 import (
+	"log"
 	"testing"
 
+	"github.com/jaswanth05rongali/pub-sub/logger"
 	"github.com/spf13/viper"
 )
 
 func TestConfigInit(t *testing.T) {
+	FileLocation := "./testlogs/config_test.log"
+	err := logger.NewLogger(FileLocation)
+	if err != nil {
+		log.Fatalf("Could not instantiate log %s", err.Error())
+	}
 
 	Init(false)
 	broker := viper.GetString("broker")
-	group := viper.GetString("group")
-	topic := viper.GetString("topic")
 	serverRunTime := viper.GetInt("serverRunTime")
 	serverDownTime := viper.GetInt("serverDownTime")
 	waitTime := viper.GetInt("waitTime")
@@ -20,18 +25,6 @@ func TestConfigInit(t *testing.T) {
 		t.Logf("Init(false) PASSED, expected \"localhost:19092\" got %v", broker)
 	} else {
 		t.Errorf("Init(false) PASSED, expected \"localhost:19092\" got %v", broker)
-	}
-
-	if group == "my-Group" {
-		t.Logf("Init(false) PASSED, expected \"my-Group\" got %v", group)
-	} else {
-		t.Errorf("Init(false) FAILED, expected \"my-Group\" got %v", group)
-	}
-
-	if topic == "foo" {
-		t.Logf("Init(false) PASSED, expected \"foo\" got %v", topic)
-	} else {
-		t.Errorf("Init(false) FAILED, expected \"foo\" got %v", topic)
 	}
 
 	if serverRunTime == 120 {

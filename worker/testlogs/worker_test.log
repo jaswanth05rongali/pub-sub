@@ -1,0 +1,18 @@
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T09:47:15+05:30"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T10:08:45+05:30"}
+{"level":"info","msg":"Created Consumer rdkafka#consumer-1","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"% Message on newTopic[0]@0:\n{\"request_id\":\"1\",\"topic_name\":\"foo\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"1254\",\"pubMessageType\":\"0\",\"pubPartition\":\"3\"}","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"% Headers: [myTestHeader=\"header values are binary\"]","time":"2020-05-25T10:09:28+05:30"}
+{"level":"error","msg":"% Error: Success: Success","time":"2020-05-25T10:09:28+05:30"}
+{"level":"error","msg":"% Error: Success: Success","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"Ignored \u003cnil\u003e","time":"2020-05-25T10:09:28+05:30"}
+{"level":"error","msg":"% Error: Success: Success","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"% Message on newTopic[0]@0:\n{\"request_id\":\"1\",\"topic_name\":\"foo\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"1254\",\"pubMessageType\":\"0\",\"pubPartition\":\"3\"}","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"% Headers: [myTestHeader=\"header values are binary\"]","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"% Message on newTopic[0]@0:\n{\"request_id\":\"1\",\"topic_name\":\"foo\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"1254\",\"pubMessageType\":\"0\",\"pubPartition\":\"3\"}","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"% Headers: [myTestHeader=\"header values are binary\"]","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"% Message on newTopic[0]@0:\n{\"request_id\":\"1\",\"topic_name\":\"foo\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"1254\",\"pubMessageType\":\"0\",\"pubPartition\":\"3\"}","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"% Headers: [myTestHeader=\"header values are binary\"]","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"% Message on newTopic[0]@0:\n{\"request_id\":\"1\",\"topic_name\":\"foo\",\"message_body\":\"Transaction Successful\",\"transaction_id\":\"987456321\",\"email\":\"kafka@gopostman.com\",\"phone\":\"9876543210\",\"customer_id\":\"1\",\"key\":\"1254\",\"pubMessageType\":\"0\",\"pubPartition\":\"3\"}","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"% Headers: [myTestHeader=\"header values are binary\"]","time":"2020-05-25T10:09:28+05:30"}
+{"level":"info","msg":"Ignored \u003cnil\u003e","time":"2020-05-25T10:09:28+05:30"}
