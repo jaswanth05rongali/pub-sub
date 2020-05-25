@@ -1,0 +1,8 @@
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T09:53:38+05:30"}
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T10:02:26+05:30"}
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T10:05:19+05:30"}
+{"level":"debug","msg":"Path: /api/v1/data, handler: github.com/jaswanth05rongali/pub-sub/api.postDataToKafka, method: POST, registered routes.","time":"2020-05-25T10:05:19+05:30"}
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T10:25:01+05:30"}
+{"level":"debug","msg":"Path: /api/v1/data, handler: github.com/jaswanth05rongali/pub-sub/api.postDataToKafka, method: POST, registered routes.","time":"2020-05-25T10:25:01+05:30"}
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T10:26:22+05:30"}
+{"level":"debug","msg":"Path: /api/v1/data, handler: github.com/jaswanth05rongali/pub-sub/api.postDataToKafka, method: POST, registered routes.","time":"2020-05-25T10:26:22+05:30"}

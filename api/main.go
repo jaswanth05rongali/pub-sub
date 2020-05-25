@@ -68,6 +68,7 @@ func main() {
 }
 
 func server(listenAddr string) error {
+	producerLogger := logger.Getlogger()
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.New()

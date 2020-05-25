@@ -1,7 +1,10 @@
 package factory
 
 import (
+	"log"
 	"testing"
+
+	"github.com/jaswanth05rongali/pub-sub/logger"
 )
 
 type TestDataItems struct {
@@ -10,6 +13,12 @@ type TestDataItems struct {
 }
 
 func TestFactoryGetMessage(t *testing.T) {
+	FileLocation := "./testlogs/factory_test.log"
+	err := logger.NewLogger(FileLocation)
+	if err != nil {
+		log.Fatalf("Could not instantiate log %s", err.Error())
+	}
+
 	dataItems := []TestDataItems{
 		{[]string{"0", "123", "0", "foo", "message"}, ""},
 		{[]string{"1", "123", "0", "foo", "message"}, "123"},

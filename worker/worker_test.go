@@ -2,13 +2,20 @@ package worker
 
 import (
 	"fmt"
+	"log"
 	"testing"
 
 	"github.com/golang/mock/gomock"
+	"github.com/jaswanth05rongali/pub-sub/logger"
 	"github.com/jaswanth05rongali/pub-sub/mocks"
 )
 
 func TestInit(t *testing.T) {
+	FileLocation := "./testlogs/worker_test.log"
+	err := logger.NewLogger(FileLocation)
+	if err != nil {
+		log.Fatalf("Could not instantiate log %s", err.Error())
+	}
 	var c *ConsumerObject
 	broker := "localhost:19092"
 	group := "testGroup"
