@@ -14,27 +14,9 @@ import (
 //Fields Type to pass when we want to call WithFields for structured logging
 type Fields map[string]interface{}
 
-const (
-	//Debug has verbose message
-	Debug = "debug"
-	//Info is default log level
-	Info = "info"
-	//Warn is for logging messages about possible issues
-	Warn = "warn"
-	//Error is for logging errors
-	Error = "error"
-	//Fatal is for logging fatal messages. The sytem shutsdown after logging the message.
-	Fatal = "fatal"
-)
-
 var (
 	errInvalidLoggerInstance = errors.New("Invalid logger instance")
 )
-
-//LogEntry Object
-type LogEntry struct {
-	entry *logrus.Entry
-}
 
 //Logger Object
 type Logger struct {
@@ -124,58 +106,6 @@ func (l *Logger) Fatalf(format string, args ...interface{}) {
 //Panicf executes the Panicf call on logger
 func (l *Logger) Panicf(format string, args ...interface{}) {
 	l.logger.Fatalf(format, args...)
-}
-
-//WithFields return a LogEntry with fields
-func (l *Logger) WithFields(fields Fields) LogEntry {
-	return LogEntry{
-		entry: l.logger.WithFields(convertToLogrusFields(fields)),
-	}
-}
-
-//Debugf executes the Debugf call on logentry
-func (l *LogEntry) Debugf(format string, args ...interface{}) {
-	l.entry.Debugf(format, args...)
-}
-
-//Infof executes the Infof call on logentry
-func (l *LogEntry) Infof(format string, args ...interface{}) {
-	l.entry.Infof(format, args...)
-}
-
-//Warnf executes the Warnf call on logentry
-func (l *LogEntry) Warnf(format string, args ...interface{}) {
-	l.entry.Warnf(format, args...)
-}
-
-//Errorf executes the Errorf call on logentry
-func (l *LogEntry) Errorf(format string, args ...interface{}) {
-	l.entry.Errorf(format, args...)
-}
-
-//Fatalf executes the Fatalf call on logentry
-func (l *LogEntry) Fatalf(format string, args ...interface{}) {
-	l.entry.Fatalf(format, args...)
-}
-
-//Panicf executes the Panicf call on logentry
-func (l *LogEntry) Panicf(format string, args ...interface{}) {
-	l.entry.Fatalf(format, args...)
-}
-
-//WithFields return a LogEntry with fields
-func (l *LogEntry) WithFields(fields Fields) LogEntry {
-	return LogEntry{
-		entry: l.entry.WithFields(convertToLogrusFields(fields)),
-	}
-}
-
-func convertToLogrusFields(fields Fields) logrus.Fields {
-	logrusFields := logrus.Fields{}
-	for index, val := range fields {
-		logrusFields[index] = val
-	}
-	return logrusFields
 }
 
 //Getlogger returns the logger object
