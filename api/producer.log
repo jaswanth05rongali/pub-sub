@@ -70,3 +70,18 @@
 {"level":"info","msg":"Delivered message to topic Phone [0] at offset 16","time":"2020-05-25T12:11:06Z"}
 {"level":"info","msg":"Delivered message to topic Phone [1] at offset 19","time":"2020-05-25T12:11:10Z"}
 {"level":"info","msg":"got an interrupt, exiting...","time":"2020-05-25T12:12:00Z"}
+{"level":"info","msg":"Starting API......","time":"2020-05-25T15:54:52Z"}
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T15:54:52Z"}
+{"level":"info","msg":"starting server at 0.0.0.0:9000","time":"2020-05-25T15:54:52Z"}
+{"level":"debug","msg":"Path: /api/v1/data, handler: main.postDataToKafka, method: POST, registered routes.","time":"2020-05-25T15:54:52Z"}
+{"level":"error","msg":"error while running api, exiting...","time":"2020-05-25T15:54:52Z"}
+{"level":"info","msg":"Starting API......","time":"2020-05-25T15:55:18Z"}
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T15:55:18Z"}
+{"level":"info","msg":"starting server at 0.0.0.0:9000","time":"2020-05-25T15:55:18Z"}
+{"level":"debug","msg":"Path: /api/v1/data, handler: main.postDataToKafka, method: POST, registered routes.","time":"2020-05-25T15:55:18Z"}
+{"level":"error","msg":"error while running api, exiting...","time":"2020-05-25T15:55:18Z"}
+{"level":"info","msg":"Starting API......","time":"2020-05-25T15:56:03Z"}
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T15:56:03Z"}
+{"level":"info","msg":"starting server at 0.0.0.0:9000","time":"2020-05-25T15:56:03Z"}
+{"level":"debug","msg":"Path: /api/v1/data, handler: main.postDataToKafka, method: POST, registered routes.","time":"2020-05-25T15:56:03Z"}
+{"level":"info","msg":"got an interrupt, exiting...","time":"2020-05-25T16:07:36Z"}

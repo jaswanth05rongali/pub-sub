@@ -1,3 +1,7 @@
 {"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T09:44:38+05:30"}
 {"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T10:07:46+05:30"}
 {"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T12:34:47Z"}
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T15:04:06Z"}
+{"level":"info","msg":"Created Producer rdkafka#producer-2","time":"2020-05-25T15:04:06Z"}
+{"level":"info","msg":"Created Producer rdkafka#producer-1","time":"2020-05-25T15:04:43Z"}
+{"level":"info","msg":"Created Producer rdkafka#producer-2","time":"2020-05-25T15:04:43Z"}
