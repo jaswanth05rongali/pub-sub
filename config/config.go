@@ -11,33 +11,34 @@ import (
 
 //Init is a config intializer function
 func Init(apiCall bool) {
-	var bodyBytes []byte
-	var err error
 	var jsonPath string
 	if apiCall {
 		jsonPath, _ = filepath.Abs("config/config.json")
 	} else {
 		jsonPath, _ = filepath.Abs("../config/config.json")
 	}
-	bodyBytes, err = ioutil.ReadFile(jsonPath)
+	bodyBytes, err := ioutil.ReadFile(jsonPath)
 	if err != nil {
 		fmt.Println("Couldn't read local configuration json file.", err)
 	}
 
-	parseConfiguration(bodyBytes)
+	parseConfiguration(bodyBytes, apiCall)
 }
 
-func parseConfiguration(body []byte) {
+func parseConfiguration(body []byte, apiCall bool) {
 	var localConfig config
 	err := json.Unmarshal(body, &localConfig)
 	if err != nil {
 		fmt.Println("Cannot parse configuration from json file, message: " + err.Error())
 	}
-	for key, value := range localConfig.ProducerAPI[0].Source {
-		viper.Set(key, value)
-	}
-	for key, value := range localConfig.Consumer[0].Source {
-		viper.Set(key, value)
+	if apiCall {
+		for key, value := range localConfig.ProducerAPI[0].Source {
+			viper.Set(key, value)
+		}
+	} else {
+		for key, value := range localConfig.Consumer[0].Source {
+			viper.Set(key, value)
+		}
 	}
 }
 
