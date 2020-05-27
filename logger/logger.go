@@ -1,7 +1,6 @@
 package logger
 
 import (
-	"errors"
 	"io"
 	"os"
 
@@ -9,13 +8,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	lumberjack "gopkg.in/natefinch/lumberjack.v2"
-)
-
-//Fields Type to pass when we want to call WithFields for structured logging
-type Fields map[string]interface{}
-
-var (
-	errInvalidLoggerInstance = errors.New("Invalid logger instance")
 )
 
 //Logger Object
