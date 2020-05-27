@@ -48,8 +48,8 @@
                 - zk3
             environment:
                 KAFKA_BROKER_ID: 1
-                KAFKA_ZOOKEEPER_CONNECT: 192.168.0.105:22181,192.168.0.105:32181,192.168.0.105:42181
-                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.105:19092
+                KAFKA_ZOOKEEPER_CONNECT: ${MY_IP}:22181,${MY_IP}:32181,${MY_IP}:42181
+                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${MY_IP}:19092
                 KAFKA_DELETE_TOPIC_ENABLE: "true" 
 
         kafka-2:
@@ -62,8 +62,8 @@
                 - zk3
             environment:
                 KAFKA_BROKER_ID: 2
-                KAFKA_ZOOKEEPER_CONNECT: 192.168.0.105:22181,192.168.0.105:32181,192.168.0.105:42181
-                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.105:29092
+                KAFKA_ZOOKEEPER_CONNECT: ${MY_IP}:22181,${MY_IP}:32181,${MY_IP}:42181
+                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${MY_IP}:29092
                 KAFKA_DELETE_TOPIC_ENABLE: "true" 
         
         kafka-3:
@@ -76,6 +76,6 @@
                 - zk3
             environment:
                 KAFKA_BROKER_ID: 3
-                KAFKA_ZOOKEEPER_CONNECT: 192.168.0.105:22181,192.168.0.105:32181,192.168.0.105:42181
-                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.105:39092
+                KAFKA_ZOOKEEPER_CONNECT: ${MY_IP}:22181,${MY_IP}:32181,${MY_IP}:42181
+                KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${MY_IP}:39092
                 KAFKA_DELETE_TOPIC_ENABLE: "true" 
