@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -82,8 +81,6 @@ func server(listenAddr string) error {
 }
 
 func postDataToKafka(ctx *gin.Context) {
-	parent := context.Background()
-	defer parent.Done()
 
 	form := &struct {
 		Requestid      string `json:"request_id"`

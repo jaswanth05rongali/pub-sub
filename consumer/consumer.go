@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
+	"os"
 
+	"github.com/gin-gonic/gin"
 	"github.com/jaswanth05rongali/pub-sub/client"
 	"github.com/jaswanth05rongali/pub-sub/config"
 	"github.com/jaswanth05rongali/pub-sub/logger"
@@ -32,6 +35,12 @@ func main() {
 	consumerLogger := logger.Getlogger()
 	consumerLogger.Infof("Starting %v Consumer......", topics)
 
+	if topics == "Phone" {
+		go apiHandler("0.0.0.0:5001")
+	} else {
+		go apiHandler("0.0.0.0:5000")
+	}
+
 	broker := viper.GetString("broker")
 	group := topics + "Group"
 	// topics := viper.GetString("topic")
@@ -57,4 +66,28 @@ func main() {
 	fmt.Println(outputString)
 	consumerLogger.Infof(outputString)
 	consumer.GetConsumer().Close()
+}
+
+func apiHandler(listenAddr string) {
+	gin.SetMode(gin.ReleaseMode)
+	apiLogger := logger.Getlogger()
+
+	r := gin.New()
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
+	r.GET("/health", healthController)
+	err := r.Run(listenAddr)
+	if err != nil {
+		apiLogger.Errorf("Server not able to startup with error: ", err)
+		os.Exit(1)
+	}
+}
+
+func healthController(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, map[string]interface{}{
+		"message": "Success",
+	})
+
+	ctx.Abort()
+	return
 }
